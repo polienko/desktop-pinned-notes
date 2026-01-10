@@ -4,6 +4,17 @@ import json
 from datetime import datetime
 import sys, os
 
+# TODO:
+# - pin/unpin
+# - scroll bar on width?
+# * tabs?
+# * themed ttk - change
+# - full window remember
+# - html on/off
+# - save/settings buttons
+# - CTRL+Z ???
+
+
 pyFile = sys.argv[0]
 pyPath = os.path.dirname(pyFile) + "\\"
 print(pyPath)
