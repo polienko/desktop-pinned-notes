@@ -17,6 +17,7 @@ import sys, os
 # - save/settings buttons
 # - CTRL+Z ???
 
+default_autosave_value_in_sec = 3
 
 pyFile = sys.argv[0]
 pyPath = os.path.dirname(pyFile) + "\\"
@@ -44,7 +45,7 @@ def save_notes():
     print(f"{current_time} - Notes saved")
 
     # Schedule the next save after 1 minute (60000 milliseconds)
-    root.after(60000, save_notes)
+    root.after(autosave_seconds * 1000, save_notes)
 
 def on_close():
     save_notes()  # Save notes before closing the app
@@ -55,7 +56,8 @@ def on_close():
             "y": root.winfo_y(),
             "width": root.winfo_width(),
             "height": root.winfo_height(),
-            "transparency": transparency_scale.get()
+            "transparency": transparency_scale.get(),
+            "autosave_seconds": autosave_seconds
         }
         json.dump(settings, f)
     root.destroy()
@@ -64,6 +66,13 @@ def on_close():
 try:
     with open(settingsFile, "r") as f:
         settings = json.load(f)
+    
+    autosave_seconds = settings.get("autosave_seconds", 3)
+    
+    if not isinstance(autosave_seconds, int):
+        print(f"Warning: autosave_seconds is not int, using default value (3)")
+        autosave_seconds = default_autosave_value_in_sec
+
 except FileNotFoundError:
     # Create settings.json with default values
     settings = {
@@ -71,8 +80,11 @@ except FileNotFoundError:
         "y": 180,
         "width": 950,
         "height": 800,
-        "transparency": 100
+        "transparency": 100,
+        "autosave_seconds": default_autosave_value_in_sec
     }
+    autosave_seconds = default_autosave_value_in_sec  # setting default value
+
     with open(settingsFile, "w") as f:
         json.dump(settings, f)
 
@@ -131,12 +143,10 @@ def _onKeyRelease(event):
 
 notes.bind_all("<Key>", _onKeyRelease, "+")
 
-
-
 root.title("Notes")  # Set the title to "Notes"
 root.minsize(150, 75) # Width, Height
 
-# Schedule the initial save after 1 minute
-root.after(60000, save_notes)
+# Schedule the initial save after autosave_seconds
+root.after(autosave_seconds * 1000, save_notes)
 
 root.mainloop()
