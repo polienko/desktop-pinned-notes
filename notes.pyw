@@ -42,6 +42,8 @@ def apply_dark_theme_if_enabled():
         text_fg = "#ffffff"
         select_bg = "#4a4a4a"
         select_fg = "#ffffff"
+        trough_color = "#4a4a4a"
+        button_bg = "#404040"
         
         notes.config(
             bg=text_bg,
@@ -53,34 +55,208 @@ def apply_dark_theme_if_enabled():
         
         root.config(bg=bg_color)
         
+        settings_image = tk.PhotoImage(file=pyPath + "icon_settings_white.png")
+        settings_image_resized = settings_image.subsample(5, 5)
+        settings_button.configure(image=settings_image_resized)
+        settings_button.image = settings_image_resized  # Сохраняем ссылку
+        
+        style.theme_use('clam')
+        
+        style.configure('.', background=bg_color, foreground=fg_color)
         style.configure('TFrame', background=bg_color)
-        style.configure('Horizontal.TScale', 
+        style.configure('TLabel', background=bg_color, foreground=fg_color)
+        
+        style.configure('TButton', 
+                       background=button_bg,
+                       foreground=fg_color,
+                       borderwidth=1,
+                       focusthickness=3,
+                       focuscolor='none')
+        style.map('TButton',
+                 background=[('active', '#505050'), ('pressed', '#606060')],
+                 foreground=[('active', fg_color), ('pressed', fg_color)])
+        
+        style.configure('TCheckbutton',
                        background=bg_color,
                        foreground=fg_color,
-                       troughcolor="#3c3c3c")
-        style.configure('Vertical.TScrollbar',
+                       indicatorbackground=bg_color,
+                       indicatormargin=(1, 1, 1, 1))
+        style.map('TCheckbutton',
+                 background=[('active', bg_color), ('pressed', bg_color)],
+                 foreground=[('active', fg_color), ('pressed', fg_color)],
+                 indicatorbackground=[('selected', '#505050'), ('active', bg_color)],
+                 indicatorcolor=[('selected', fg_color), ('!selected', bg_color)])
+        
+        style.configure('Horizontal.TScale',
                        background=bg_color,
-                       troughcolor="#3c3c3c")
+                       foreground=fg_color,
+                       troughcolor=trough_color,
+                       sliderlength=15)
+        style.map('Horizontal.TScale',
+                 background=[('active', bg_color)],
+                 foreground=[('active', fg_color)])
+        
+        style.configure('Vertical.TScrollbar',
+                       background=button_bg,
+                       troughcolor=trough_color,
+                       bordercolor=bg_color,
+                       arrowcolor=fg_color,
+                       lightcolor=bg_color,
+                       darkcolor=bg_color)
+        style.map('Vertical.TScrollbar',
+                 background=[('active', '#505050'), ('pressed', '#606060')],
+                 arrowcolor=[('active', '#cccccc'), ('pressed', '#ffffff')])
+        
+        style.configure('Horizontal.TScrollbar',
+                       background=button_bg,
+                       troughcolor=trough_color,
+                       bordercolor=bg_color,
+                       arrowcolor=fg_color,
+                       lightcolor=bg_color,
+                       darkcolor=bg_color)
+        style.map('Horizontal.TScrollbar',
+                 background=[('active', '#505050'), ('pressed', '#606060')],
+                 arrowcolor=[('active', '#cccccc'), ('pressed', '#ffffff')])
+        
+        style.configure('TSpinbox',
+                       fieldbackground=text_bg,
+                       background=button_bg,
+                       foreground=fg_color,
+                       bordercolor=trough_color,
+                       lightcolor=bg_color,
+                       darkcolor=bg_color,
+                       arrowcolor=fg_color)
+        style.map('TSpinbox',
+                 fieldbackground=[('readonly', text_bg)],
+                 background=[('active', '#505050'), ('pressed', '#606060')],
+                 arrowcolor=[('active', '#cccccc'), ('pressed', '#ffffff')])
+        
+        for widget in root.winfo_children():
+            if isinstance(widget, ttk.Frame):
+                widget.configure(style='TFrame')
+            elif isinstance(widget, tk.Frame):
+                widget.config(bg=bg_color)
+        
+        if 'settings_window' in globals() and settings_window and settings_window.winfo_exists():
+            settings_window.config(bg=bg_color)
+
+            for child in settings_window.winfo_children():
+                if isinstance(child, ttk.Frame):
+                    child.configure(style='TFrame')
+                elif isinstance(child, tk.Frame):
+                    child.config(bg=bg_color)
+        
     else:
-        # Apply light theme (default system colors)
+        # Light theme
+        bg_color = 'SystemButtonFace'
+        fg_color = 'black'
+        text_bg = 'white'
+        text_fg = 'black'
+        select_bg = '#c0c0c0'
+        select_fg = 'black'
+        trough_color = '#d9d9d9'
+        button_bg = '#f0f0f0'
+        
         notes.config(
-            bg="white",
-            fg="black",
-            insertbackground="black",
-            selectbackground="#c0c0c0",
-            selectforeground="black"
+            bg=text_bg,
+            fg=text_fg,
+            insertbackground=fg_color,
+            selectbackground=select_bg,
+            selectforeground=select_fg
         )
         
-        root.config(bg='SystemButtonFace')
+        root.config(bg=bg_color)
         
-        style.configure('TFrame', background='SystemButtonFace')
-        style.configure('Horizontal.TScale', 
-                       background='SystemButtonFace',
-                       foreground='black',
-                       troughcolor='SystemButtonFace')
+        settings_image = tk.PhotoImage(file=pyPath + "icon_settings.png")
+        settings_image_resized = settings_image.subsample(5, 5)
+        settings_button.configure(image=settings_image_resized)
+        settings_button.image = settings_image_resized
+        
+        style.theme_use('clam')
+        
+        style.configure('.', background=bg_color, foreground=fg_color)
+        style.configure('TFrame', background=bg_color)
+        style.configure('TLabel', background=bg_color, foreground=fg_color)
+        
+        style.configure('TButton', 
+                       background=button_bg,
+                       foreground=fg_color,
+                       borderwidth=1,
+                       focusthickness=3,
+                       focuscolor='none')
+        style.map('TButton',
+                 background=[('active', '#e0e0e0'), ('pressed', '#d0d0d0')],
+                 foreground=[('active', fg_color), ('pressed', fg_color)])
+        
+        style.configure('TCheckbutton',
+                       background=bg_color,
+                       foreground=fg_color,
+                       indicatorbackground=bg_color,
+                       indicatormargin=(1, 1, 1, 1))
+        style.map('TCheckbutton',
+                 background=[('active', bg_color), ('pressed', bg_color)],
+                 foreground=[('active', fg_color), ('pressed', fg_color)],
+                 indicatorbackground=[('selected', '#d0d0d0'), ('active', bg_color)],
+                 indicatorcolor=[('selected', fg_color), ('!selected', bg_color)])
+        
+        style.configure('Horizontal.TScale',
+                       background=bg_color,
+                       foreground=fg_color,
+                       troughcolor=trough_color,
+                       sliderlength=15)
+        style.map('Horizontal.TScale',
+                 background=[('active', bg_color)],
+                 foreground=[('active', fg_color)])
+        
         style.configure('Vertical.TScrollbar',
-                       background='SystemButtonFace',
-                       troughcolor='SystemButtonFace')
+                       background=button_bg,
+                       troughcolor=trough_color,
+                       bordercolor=bg_color,
+                       arrowcolor=fg_color,
+                       lightcolor=bg_color,
+                       darkcolor=bg_color)
+        style.map('Vertical.TScrollbar',
+                 background=[('active', '#e0e0e0'), ('pressed', '#d0d0d0')],
+                 arrowcolor=[('active', '#666666'), ('pressed', '#333333')])
+        
+        style.configure('Horizontal.TScrollbar',
+                       background=button_bg,
+                       troughcolor=trough_color,
+                       bordercolor=bg_color,
+                       arrowcolor=fg_color,
+                       lightcolor=bg_color,
+                       darkcolor=bg_color)
+        style.map('Horizontal.TScrollbar',
+                 background=[('active', '#e0e0e0'), ('pressed', '#d0d0d0')],
+                 arrowcolor=[('active', '#666666'), ('pressed', '#333333')])
+        
+        style.configure('TSpinbox',
+                       fieldbackground=text_bg,
+                       background=button_bg,
+                       foreground=fg_color,
+                       bordercolor=trough_color,
+                       lightcolor=bg_color,
+                       darkcolor=bg_color,
+                       arrowcolor=fg_color)
+        style.map('TSpinbox',
+                 fieldbackground=[('readonly', text_bg)],
+                 background=[('active', '#e0e0e0'), ('pressed', '#d0d0d0')],
+                 arrowcolor=[('active', '#666666'), ('pressed', '#333333')])
+        
+        for widget in root.winfo_children():
+            if isinstance(widget, ttk.Frame):
+                widget.configure(style='TFrame')
+            elif isinstance(widget, tk.Frame):
+                widget.config(bg=bg_color)
+        
+        if 'settings_window' in globals() and settings_window and settings_window.winfo_exists():
+            settings_window.config(bg=bg_color)
+
+            for child in settings_window.winfo_children():
+                if isinstance(child, ttk.Frame):
+                    child.configure(style='TFrame')
+                elif isinstance(child, tk.Frame):
+                    child.config(bg=bg_color)
 
 def save_notes():
     # Save notes to notes.txt
@@ -127,22 +303,13 @@ def open_settings():
     theme_var = tk.BooleanVar(value=dark_theme_enabled)
     autosave_var = tk.IntVar(value=autosave_seconds)
     
-    if dark_theme_enabled:
-        settings_window.config(bg="#2b2b2b")
-        label_bg = "#2b2b2b"
-        label_fg = "#ffffff"
-    else:
-        settings_window.config(bg='SystemButtonFace')
-        label_bg = 'SystemButtonFace'
-        label_fg = 'black'
-    
     frame = ttk.Frame(settings_window, padding="20")
     frame.pack(fill='both', expand=True)
     
     theme_frame = ttk.Frame(frame)
     theme_frame.pack(fill='x', pady=(0, 15))
     
-    theme_label = tk.Label(theme_frame, text="Dark Theme:", bg=label_bg, fg=label_fg)
+    theme_label = ttk.Label(theme_frame, text="Dark Theme:")
     theme_label.pack(side='left')
     
     theme_switch = ttk.Checkbutton(theme_frame, variable=theme_var)
@@ -151,7 +318,7 @@ def open_settings():
     autosave_frame = ttk.Frame(frame)
     autosave_frame.pack(fill='x', pady=(0, 15))
     
-    autosave_label = tk.Label(autosave_frame, text="Autosave (seconds):", bg=label_bg, fg=label_fg)
+    autosave_label = ttk.Label(autosave_frame, text="Autosave (seconds):")
     autosave_label.pack(side='left')
     
     autosave_spinbox = ttk.Spinbox(autosave_frame, from_=1, to=60, width=10, textvariable=autosave_var)
@@ -165,6 +332,8 @@ def open_settings():
     
     cancel_button = ttk.Button(buttons_frame, text="Cancel", command=close_settings)
     cancel_button.pack(side='right')
+    
+    apply_dark_theme_if_enabled()
     
     settings_window.transient(root)
     settings_window.grab_set()
@@ -238,7 +407,6 @@ root.attributes('-topmost', True)
 root.iconbitmap(default="")
 
 style = ttk.Style(root)
-style.configure('TFrame', background='SystemButtonFace')
 
 frame_scale = ttk.Frame(root, height=30)
 frame_scale.pack(fill='x')
@@ -247,10 +415,15 @@ transparency_scale = ttk.Scale(frame_scale, from_=50, to=100, orient="horizontal
 transparency_scale.set(settings["transparency"])
 transparency_scale.pack(side='left', fill='x', expand=True, padx=(10,3), pady=5)
 
-settings_image = tk.PhotoImage(file = r"icon_settings.png")
+
+if dark_theme_enabled:
+    settings_image = tk.PhotoImage(file=pyPath + "icon_settings_white.png")
+else:
+    settings_image = tk.PhotoImage(file=pyPath + "icon_settings.png")
 settings_image_resized = settings_image.subsample(5, 5)
-settings_button = ttk.Button(frame_scale, text = 'Settings', image = settings_image_resized, command=open_settings)
+settings_button = ttk.Button(frame_scale, text='', image=settings_image_resized, command=open_settings)
 settings_button.pack(side='right', padx=(5, 10), pady=5)
+settings_button.image = settings_image_resized
 
 frame_text = ttk.Frame(root)
 frame_text.pack(fill='both', expand=True, padx=10, pady=10)
