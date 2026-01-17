@@ -34,6 +34,34 @@ def set_transparency(value):
     alpha_value = int(float(value))
     root.attributes("-alpha", alpha_value / 100)
 
+def apply_dark_theme_if_enabled():
+    if dark_theme_enabled:
+        bg_color = "#2b2b2b"
+        fg_color = "#ffffff"
+        text_bg = "#3c3c3c"
+        text_fg = "#ffffff"
+        select_bg = "#4a4a4a"
+        select_fg = "#ffffff"
+        
+        notes.config(
+            bg=text_bg,
+            fg=text_fg,
+            insertbackground=fg_color, 
+            selectbackground=select_bg,
+            selectforeground=select_fg
+        )
+        
+        root.config(bg=bg_color)
+        
+        style.configure('TFrame', background=bg_color)
+        style.configure('Horizontal.TScale', 
+                       background=bg_color,
+                       foreground=fg_color,
+                       troughcolor="#3c3c3c")
+        style.configure('Vertical.TScrollbar',
+                       background=bg_color,
+                       troughcolor="#3c3c3c")
+
 def save_notes():
     # Save notes to notes.txt
     with open(notesFile, "w") as f:
@@ -44,7 +72,7 @@ def save_notes():
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"{current_time} - Notes saved")
 
-    # Schedule the next save after 1 minute (60000 milliseconds)
+    # Schedule the next save after autosave_seconds
     root.after(autosave_seconds * 1000, save_notes)
 
 def on_close():
@@ -57,7 +85,8 @@ def on_close():
             "width": root.winfo_width(),
             "height": root.winfo_height(),
             "transparency": transparency_scale.get(),
-            "autosave_seconds": autosave_seconds
+            "autosave_seconds": autosave_seconds,
+            "dark_theme": dark_theme_enabled
         }
         json.dump(settings, f)
     root.destroy()
@@ -68,6 +97,7 @@ try:
         settings = json.load(f)
     
     autosave_seconds = settings.get("autosave_seconds", 3)
+    dark_theme_enabled = settings.get("dark_theme", False)
     
     if not isinstance(autosave_seconds, int):
         print(f"Warning: autosave_seconds is not int, using default value (3)")
@@ -81,9 +111,11 @@ except FileNotFoundError:
         "width": 950,
         "height": 800,
         "transparency": 100,
-        "autosave_seconds": default_autosave_value_in_sec
+        "autosave_seconds": default_autosave_value_in_sec,
+        "dark_theme": False
     }
-    autosave_seconds = default_autosave_value_in_sec  # setting default value
+    autosave_seconds = default_autosave_value_in_sec
+    dark_theme_enabled = False
 
     with open(settingsFile, "w") as f:
         json.dump(settings, f)
@@ -125,6 +157,8 @@ try:
 except FileNotFoundError:
     with open(notesFile, "w") as f:
         pass  # Create an empty notes.txt file
+
+apply_dark_theme_if_enabled()
 
 # Bind the on_close function to the window close event
 root.protocol("WM_DELETE_WINDOW", on_close)
