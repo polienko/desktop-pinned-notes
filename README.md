@@ -12,6 +12,9 @@ Need to keep notes visible while working? This app creates a small, floating not
 
 ![Screenshot](./Screenshot.png)
 
+### Requirements
+**Python 3.x** - download from the [official Python website](https://www.python.org/downloads/)
+
 ### License
 
 This project is licensed under the GNU General Public License v3.0.  
