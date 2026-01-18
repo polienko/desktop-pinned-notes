@@ -7,8 +7,8 @@ Need to keep notes visible while working? This app creates a small, floating not
 - slider to change transparency of the window
 - stores your notes in notes.txt
 - stores the settings in settings.json (position of window, transparency)
-- dark/light theme support (@polienko)
-- autosave notes every X seconds (setting available for change)
+- dark/light theme support ([@polienko](https://github.com/polienko))
+- autosave notes every X seconds, setting available for change ([@polienko](https://github.com/polienko))
 
 ![Screenshot](./Screenshot.png)
 
